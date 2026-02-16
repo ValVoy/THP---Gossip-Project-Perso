@@ -1,18 +1,14 @@
 Rails.application.routes.draw do
-  get "users/show"
-  get "gossips/index"
-  get "gossips/show"
-  # Page d'accueil (Consigne 2.5)
+  # Page d'accueil
   root "gossips#index"
 
-  # Pages statiques (Consigne 2.2)
+  # Pages statiques
   get "/team", to: "static_pages#team"
   get "/contact", to: "static_pages#contact"
-
-  # Landing page dynamique (Consigne 2.4)
   get "/welcome/:first_name", to: "static_pages#welcome", as: "welcome"
 
-  # Pages potins et utilisateurs (Consigne 2.6 & 2.7)
-  resources :gossips, only: [ :show ]
-  resources :users, only: [ :show ]
+  # Ressources RESTful (Consigne 2.2.1)
+  # On ajoute :index, :new et :create à la liste
+  resources :gossips, only: [:index, :show, :new, :create]
+  resources :users, only: [:show]
 end
