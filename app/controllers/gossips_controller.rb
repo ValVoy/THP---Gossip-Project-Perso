@@ -26,7 +26,7 @@ class GossipsController < ApplicationController
       flash[:success] = "Super ! Le potin a été créé avec succès."
       redirect_to root_path
     else
-      # On ne met pas de flash[:danger] ici car les erreurs sont affichées 
+      # On ne met pas de flash[:danger] ici car les erreurs sont affichées
       # via @gossip.errors dans la vue 'new' grâce au render
       render :new
     end

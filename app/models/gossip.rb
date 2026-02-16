@@ -7,11 +7,11 @@ class Gossip < ApplicationRecord
 
   # --- AJOUT DES VALIDATIONS (Consigne 2.1) ---
   # Le titre est obligatoire et doit faire entre 3 et 14 caractères
-  validates :title, 
-    presence: true, 
+  validates :title,
+    presence: true,
     length: { minimum: 3, maximum: 14, message: "doit faire entre 3 et 14 caractères" }
-  
+
   # Le contenu est obligatoire
-  validates :content, 
+  validates :content,
     presence: true
 end

@@ -1,5 +1,9 @@
 <h1 class="text-center my-4">Les derniers potins croustillants</h1>
 
+<div class="text-center mb-5">
+  <%= link_to "Partager un potin", new_gossip_path, class: "btn btn-success btn-lg" %>
+</div>
+
 <div class="row">
   <% @gossips.each do |gossip| %>
     <div class="col-md-4 mb-4">
