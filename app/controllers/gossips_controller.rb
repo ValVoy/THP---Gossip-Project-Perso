@@ -15,17 +15,19 @@ class GossipsController < ApplicationController
   def create
     # On récupère les données du formulaire via params
     # On associe le potin à notre utilisateur anonyme (Consigne 2.2.3.1)
+    anonymous_user = User.find_by(first_name: "Anonymous")
     @gossip = Gossip.new(
       title: params[:title],
       content: params[:content],
-      user: User.find_by(first_name: "Anonymous")
+      user: anonymous_user
     )
 
     if @gossip.save
-      # Succès : redirection vers l'index
+      flash[:success] = "Super ! Le potin a été créé avec succès."
       redirect_to root_path
     else
-      # Échec : on réaffiche le formulaire avec les erreurs
+      # On ne met pas de flash[:danger] ici car les erreurs sont affichées 
+      # via @gossip.errors dans la vue 'new' grâce au render
       render :new
     end
   end
