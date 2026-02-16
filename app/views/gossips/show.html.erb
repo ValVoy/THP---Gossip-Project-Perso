@@ -1,7 +1,11 @@
-<div class="bg-white p-5 rounded shadow">
-  <h1><%= @gossip.title %></h1>
-  <p class="text-muted">Publié le <%= @gossip.created_at.strftime("%d/%m/%Y") %></p>
+<div class="jumbotron p-5 mb-4 bg-white border rounded-3 shadow">
+  <h1 class="display-4"><%= @gossip.title %></h1>
+  <p class="text-muted">Posté le <%= @gossip.created_at.strftime("%d/%m/%Y") %></p>
+  <hr class="my-4">
   <p class="lead"><%= @gossip.content %></p>
-  <hr>
-  <p>Auteur : <%= link_to @gossip.user.first_name, user_path(@gossip.user.id), class: "badge bg-info text-dark text-decoration-none" %></p>
+  <p class="mt-4">
+    Auteur : 
+    <%= link_to @gossip.user.first_name, user_path(@gossip.user.id), class: "btn btn-info btn-sm" %>
+  </p>
+  <%= link_to "Retour à l'accueil", root_path, class: "btn btn-secondary mt-3" %>
 </div>
