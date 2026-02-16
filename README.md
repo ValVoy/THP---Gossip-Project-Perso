@@ -151,10 +151,58 @@ rails console
 - [FreeDoc](https://github.com/ValVoy/THP---FreeDoc-Project) — Doctors, patients, appointments, specialties (N-N associations).
 - [DogBnB](https://github.com/ff14eternitalis-debug/dogbnb) — Dog rental (relational model).
 
+----------------------------------
+
+## Key Concepts Learned (Updated)
+
+### 1. Advanced ActiveRecord Associations
+- **has_many :through**: Used to link Gossips and Tags via `JoinTableGossipTag`, and to link PrivateMessages to multiple recipient Users via `PrivateMessageRecipient`.
+- **Polymorphic associations**: Comments can belong to a Gossip or to another Comment (`commentable`). Likes can belong to a Gossip or a Comment (`likeable`). Enables comment-on-comment and like-on-gossip-or-comment without duplicate tables.
+- **class_name**: Used on PrivateMessage (sender, recipients) and related User associations to distinguish multiple references to the same model.
+
+### 2. MVC Architecture & Routing
+- **RESTful Routing**: Implementation of specific routes for `gossips` and `users` using `resources`.
+- **Dynamic Routing**: Using `params` to capture data from URLs (e.g., the welcome landing page).
+- **Controller Logic**: Orchestrating data flow between ActiveRecord models and ERB views, ensuring variables are correctly passed using instance variables (`@`).
+
+### 3. Front-End Integration
+- **Layouts & Partials**: Utilizing `application.html.erb` to maintain a consistent Header and Footer across all pages.
+- **Helpers**: Mastering `link_to` and URL helpers (`_path`) to navigate the application without hardcoding URLs.
+
+---
+
+## 🌐 Front-End Features (Implemented Today)
+
+The application has transitioned from a backend-only project to a functional web app:
+* **Dynamic Welcome Page**: Personalized greeting via `/welcome/:first_name`.
+* **Gossip Index**: A curated homepage listing all gossips from the database using **Bootstrap 5 Cards**.
+* **Gossip Show Page**: A detailed view for each gossip, including content, date, and author info.
+* **User Profile Page**: A dedicated page for each user showing their bio, age, and city.
+* **Static Pages**: Functional `/team` and `/contact` pages.
+* **Custom UI**: Integrated **Bootstrap 5.3** via CDN and custom CSS styling in `application.css` for a modern look.
+
+---
+
+## 🚀 How to Run the App
+
+1. **Launch the server**:
+  ```bash
+  ./bin/dev
+  ```
+
+2. **Access the interface**:
+  ```
+  Home: http://localhost:3000/
+  Welcome: http://localhost:3000/welcome/your_name
+  Team: http://localhost:3000/team
+  ```
+
 ## Authors
 
 This project is for educational use within The Hacking Project. Feel free to modify or improve it in your own fork.
 
-Morgan, Romain & Valentin
+Morgan, Romain & Valentin (Backend Foundations)
+
+Valentin (Front-End & MVC implementation)
 
 _The Hacking Project 2026_
