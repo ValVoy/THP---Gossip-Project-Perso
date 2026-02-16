@@ -19,12 +19,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_11_160001) do
   end
 
   create_table "comments", force: :cascade do |t|
-    t.text "content"
-    t.integer "user_id", null: false
-    t.string "commentable_type", null: false
     t.bigint "commentable_id", null: false
+    t.string "commentable_type", null: false
+    t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
     t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
@@ -48,11 +48,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_11_160001) do
   end
 
   create_table "likes", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.string "likeable_type", null: false
-    t.bigint "likeable_id", null: false
     t.datetime "created_at", null: false
+    t.bigint "likeable_id", null: false
+    t.string "likeable_type", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
     t.index ["likeable_type", "likeable_id"], name: "index_likes_on_likeable"
     t.index ["user_id"], name: "index_likes_on_user_id"
   end

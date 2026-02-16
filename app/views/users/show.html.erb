@@ -1,0 +1,7 @@
+<div class="card p-4">
+  <h2>Profil de <%= @user.first_name %> <%= @user.last_name %></h2>
+  <p><strong>Âge :</strong> <%= @user.age %> ans</p>
+  <p><strong>Ville :</strong> <%= @user.city.name %> (<%= @user.city.zip_code %>)</p>
+  <p><strong>Description :</strong> <%= @user.description %></p>
+  <p><strong>Email :</strong> <%= @user.email %></p>
+</div>
