@@ -1,17 +1,24 @@
-<h1 class="text-center my-4">Les derniers potins croustillants</h1>
-
-<div class="text-center mb-5">
-  <%= link_to "Partager un potin", new_gossip_path, class: "btn btn-success btn-lg" %>
+<div class="mb-5 d-flex justify-content-between align-items-end">
+  <div>
+    <h2 class="fw-bold mb-0 text-gradient">Archives Complètes</h2>
+    <p class="text-muted mb-0">L'intégralité des ragots postés sur la plateforme.</p>
+  </div>
+  <span class="badge bg-secondary px-3 py-2 rounded-pill"><%= @gossips.count %> Potins</span>
 </div>
 
-<div class="row">
+<div class="row row-cols-1 row-cols-md-2 g-4">
   <% @gossips.each do |gossip| %>
-    <div class="col-md-4 mb-4">
-      <div class="card h-100 shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title text-primary"><%= gossip.title %></h5>
-          <p class="card-text text-muted">Auteur : <strong><%= gossip.user.first_name %></strong></p>
-          <%= link_to "Voir plus", gossip_path(gossip.id), class: "btn btn-outline-primary" %>
+    <div class="col">
+      <div class="card p-2 bg-dark-subtle border-secondary">
+        <div class="card-body d-flex justify-content-between align-items-center text-white">
+          <div>
+            <h5 class="fw-bold mb-1"><%= gossip.title %></h5>
+            <small class="text-muted">Publié par <%= gossip.user.first_name %> à <%= gossip.user.city.name %></small>
+          </div>
+          <div class="ms-3 text-end">
+            <div class="badge bg-dark border border-secondary text-primary rounded-pill mb-2"><%= gossip.comments.count %> 💬</div>
+            <%= link_to "Explorer", gossip_path(gossip.id), class: "btn btn-sm btn-primary d-block rounded-pill" %>
+          </div>
         </div>
       </div>
     </div>

@@ -1,11 +1,95 @@
-<div class="container mt-5">
-  <div class="p-5 mb-4 bg-light rounded-3 text-center shadow-sm">
-    <h1 class="display-4 fw-bold">Notre Équipe 😇</h1>
-    <p class="fs-4">
-      Bienvenue ! Voici l'équipe de choc derrière <strong>The Gossip Project</strong>. 
-      Nous sommes deux moussaillons passionnés par le code et les potins croustillants. 
+<div class="p-5 mb-5 rounded-5 shadow-lg position-relative overflow-hidden" style="background: linear-gradient(145deg, #161b22, #0d1117); border: 1px solid #30363d;">
+  <div class="container-fluid py-4 position-relative" style="z-index: 2;">
+    <h1 class="display-3 fw-bold text-gradient mb-3">L'Équipe de Choc ⚡</h1>
+    <p class="col-md-8 fs-4 text-secondary">
+      Une équipe soudée (et 100% humaine, promis) qui transforme les idées en lignes de code et les potins en art numérique.
     </p>
-    <hr class="my-4">
-    <p>On travaille dur pour vous offrir la meilleure plateforme de commérages du web.</p>
   </div>
+  <div class="position-absolute" style="width: 300px; height: 300px; background: rgba(88, 166, 255, 0.05); border-radius: 50%; top: -100px; right: -100px;"></div>
 </div>
+
+<div class="row g-4 justify-content-center align-items-stretch">
+  
+  <div class="col-md-6 col-lg-4">
+    <div class="card p-4 h-100 border-secondary shadow-sm hover-card">
+      <div class="card-body text-center d-flex flex-column align-items-center">
+        <div class="avatar-circle mb-4">🧔</div>
+        <h3 class="fw-bold mb-1">Valentin</h3>
+        <span class="badge bg-primary-subtle text-primary rounded-pill mb-3 px-3">Lead Developer</span>
+        <p class="text-secondary small">Dompteur de Dark Mode et architecte du CRUD. Il ne dort jamais tant qu'une route Rails n'est pas parfaitement tracée.</p>
+        <div class="mt-auto pt-3 w-100">
+          <div class="progress" style="height: 10px; background-color: #0d1117;">
+            <div class="progress-bar bg-primary" style="width: 95%"></div>
+          </div>
+          <small class="text-muted mt-2 d-block">Coffee to Code conversion: 95%</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-4">
+    <div class="card p-4 h-100 border-secondary shadow-sm hover-card">
+      <div class="card-body text-center d-flex flex-column align-items-center">
+        <div class="avatar-circle mb-4">👨‍💻</div>
+        <h3 class="fw-bold mb-1">Morgan</h3>
+        <span class="badge bg-purple-subtle text-purple rounded-pill mb-3 px-3">Master of Masters</span>
+        <p class="text-secondary small">L'esprit le plus vif du groupe. Un humain doté d'une logique implacable, capable de débugger un système complexe rien qu'en le regardant fixement.</p>
+        <div class="mt-auto pt-3 w-100">
+          <div class="progress" style="height: 10px; background-color: #0d1117;">
+            <div class="progress-bar bg-purple" style="width: 98%"></div>
+          </div>
+          <small class="text-muted mt-2 d-block">Human Brain Power: 98%</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-4">
+    <div class="card p-4 h-100 border-secondary shadow-sm hover-card">
+      <div class="card-body text-center d-flex flex-column align-items-center">
+        <div class="avatar-circle mb-4">🧤</div>
+        <h3 class="fw-bold mb-1">Romain</h3>
+        <span class="badge bg-danger-subtle text-danger rounded-pill mb-3 px-3">Expert en Nettoyage</span>
+        <p class="text-secondary small">Célèbre pour sa capacité légendaire à supprimer des collaborateurs accidentellement (ou pas). Mais bon, on l'aime bien quand même.</p>
+        <div class="mt-auto pt-3 w-100">
+          <div class="progress" style="height: 10px; background-color: #0d1117;">
+            <div class="progress-bar bg-danger" style="width: 40%"></div>
+          </div>
+          <small class="text-muted mt-2 d-block">Taux de survie des collègues: 40%</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .hover-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: #161b22;
+  }
+  .hover-card:hover {
+    transform: translateY(-10px);
+    border-color: #58a6ff !important;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5) !important;
+  }
+  .avatar-circle {
+    width: 85px;
+    height: 85px;
+    background: #0d1117;
+    border: 2px solid #30363d;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8rem;
+  }
+  .bg-purple-subtle { background-color: rgba(188, 140, 255, 0.1); }
+  .text-purple { color: #bc8cff; }
+  .bg-purple { background-color: #bc8cff; }
+  .text-gradient { 
+    background: linear-gradient(90deg, #58a6ff, #bc8cff); 
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent; 
+  }
+</style>

@@ -1,51 +1,58 @@
-<div class="jumbotron p-5 mb-4 bg-white border rounded-3 shadow">
-  <h1 class="display-4"><%= @gossip.title %></h1>
-  <p class="text-muted">Posté le <%= @gossip.created_at.strftime("%d/%m/%Y") %></p>
-  <hr class="my-4">
-  <p class="lead"><%= @gossip.content %></p>
+<div class="jumbotron-modern mb-5">
+  <div class="d-flex align-items-center mb-3">
+    <span class="badge bg-primary me-2">Gossip #<%= @gossip.id %></span>
+    <span class="text-muted">Posté le <%= @gossip.created_at.strftime("%d %b %Y") %></span>
+  </div>
   
-  <p class="mt-4">
-    Auteur : 
-    <%= link_to @gossip.user.first_name, user_path(@gossip.user.id), class: "btn btn-info btn-sm" %>
-  </p>
-  
-  <p>
-    Ville : 
-    <%= link_to @gossip.user.city.name, city_path(@gossip.user.city.id), class: "btn btn-outline-info btn-sm" %>
-  </p>
+  <h1 class="display-5 fw-bold mb-4"><%= @gossip.title %></h1>
+  <p class="fs-5 leading-relaxed mb-5"><%= @gossip.content %></p>
 
-  <%= link_to "Retour à l'accueil", root_path, class: "btn btn-secondary mt-3" %>
-</div>
+  <div class="d-flex flex-wrap gap-3">
+    <div class="bg-light p-3 rounded-4 border d-flex align-items-center">
+      <div class="me-3 fs-3">👤</div>
+      <div>
+        <small class="text-muted d-block">Auteur</small>
+        <%= link_to @gossip.user.first_name, user_path(@gossip.user.id), class: "fw-bold text-decoration-none text-dark" %>
+      </div>
+    </div>
 
-<div class="mt-4 mb-5">
-  <%= link_to "Modifier ce potin", edit_gossip_path(@gossip.id), class: "btn btn-outline-warning" %>
-  
-  <%= link_to "Supprimer", gossip_path(@gossip.id), 
-      data: { turbo_method: :delete, turbo_confirm: "Es-tu sûr de vouloir supprimer ce potin ?" }, 
-      class: "btn btn-danger" %>
-</div>
-
-<hr>
-<h3>Commentaires (<%= @gossip.comments.count %>)</h3>
-
-<%# Liste des commentaires %>
-<div class="list-group mb-4">
-  <% @gossip.comments.select(&:persisted?).each do |comment| %>
-  <div class="list-group-item">
-    <p class="mb-1"><%= comment.content %></p>
-    <div class="d-flex justify-content-between align-items-center">
-      <small class="text-muted">Par <%= comment.user.first_name %> le <%= comment.created_at.strftime("%d/%m/%Y") %></small>
-      <%= link_to "Modifier", edit_gossip_comment_path(@gossip.id, comment.id), class: "btn btn-sm btn-outline-secondary" %>
+    <div class="bg-light p-3 rounded-4 border d-flex align-items-center">
+      <div class="me-3 fs-3">📍</div>
+      <div>
+        <small class="text-muted d-block">Ville</small>
+        <%= link_to @gossip.user.city.name, city_path(@gossip.user.city.id), class: "fw-bold text-decoration-none text-dark" %>
+      </div>
     </div>
   </div>
-<% end %>
+
+  <div class="mt-5 pt-4 border-top">
+    <%= link_to "Modifier", edit_gossip_path(@gossip.id), class: "btn btn-outline-warning btn-sm px-4" %>
+    <%= link_to "Supprimer", gossip_path(@gossip.id), data: { turbo_method: :delete, turbo_confirm: "Action irréversible ?" }, class: "btn btn-link text-danger btn-sm" %>
+  </div>
 </div>
 
-<%# Formulaire de création %>
-<h5>Ajouter un commentaire :</h5>
-<%= form_tag gossip_comments_path(@gossip.id), method: "post", data: { turbo: false } do %>
-  <div class="form-group mb-3">
-    <%= text_area_tag 'content', nil, class: 'form-control', placeholder: "Votre commentaire..." %>
+<div class="row">
+  <div class="col-lg-8 mx-auto">
+    <h3 class="fw-bold mb-4">Commentaires (<%= @gossip.comments.count %>)</h3>
+
+    <% @gossip.comments.select(&:persisted?).each do |comment| %>
+      <div class="card mb-3 border-0 shadow-sm rounded-4">
+        <div class="card-body">
+          <p class="mb-2"><%= comment.content %></p>
+          <div class="d-flex justify-content-between align-items-center border-top pt-2">
+            <small class="text-muted fw-light">Par <%= comment.user.first_name %></small>
+            <%= link_to "Modifier", edit_gossip_comment_path(@gossip.id, comment.id), class: "text-muted small text-decoration-none" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="card mt-5 bg-primary text-white p-4 border-0 shadow rounded-4">
+      <h5 class="mb-3">Ajouter un commentaire</h5>
+      <%= form_tag gossip_comments_path(@gossip.id), method: "post" do %>
+        <%= text_area_tag 'content', nil, class: 'form-control border-0 mb-3', placeholder: "Écris quelque chose...", rows: 3 %>
+        <%= submit_tag "Envoyer", class: "btn btn-light text-primary fw-bold" %>
+      <% end %>
+    </div>
   </div>
-  <%= submit_tag "Commenter", class: "btn btn-primary" %>
-<% end %>
+</div>
