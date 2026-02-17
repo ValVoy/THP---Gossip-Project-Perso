@@ -1,0 +1,19 @@
+<div class="container mt-5">
+  <h2>Modifier mon commentaire</h2>
+  
+  <%= form_tag gossip_comment_path(@gossip.id, @comment.id), method: "patch" do %>
+    <div class="form-group mb-3">
+      <%= label_tag :content, "Message :" %>
+      <%= text_area_tag :content, @comment.content, class: "form-control" %>
+    </div>
+    <%= submit_tag "Mettre à jour", class: "btn btn-warning" %>
+  <% end %>
+
+  <hr>
+  <h5>Zone de danger</h5>
+  <%= button_to "Supprimer le commentaire", 
+    gossip_comment_path(@gossip.id, @comment.id), 
+    method: :delete, 
+    form: { data: { turbo_confirm: "Supprimer ce commentaire ?" } }, 
+    class: "btn btn-danger" %>
+</div>

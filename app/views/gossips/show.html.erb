@@ -8,8 +8,7 @@
     Auteur : 
     <%= link_to @gossip.user.first_name, user_path(@gossip.user.id), class: "btn btn-info btn-sm" %>
   </p>
-
-  <%# AJOUT DE LA VILLE ICI (Consigne 2.2.3) %>
+  
   <p>
     Ville : 
     <%= link_to @gossip.user.city.name, city_path(@gossip.user.city.id), class: "btn btn-outline-info btn-sm" %>
@@ -32,11 +31,14 @@
 <%# Liste des commentaires %>
 <div class="list-group mb-4">
   <% @gossip.comments.select(&:persisted?).each do |comment| %>
-    <div class="list-group-item">
-      <p class="mb-1"><%= comment.content %></p>
+  <div class="list-group-item">
+    <p class="mb-1"><%= comment.content %></p>
+    <div class="d-flex justify-content-between align-items-center">
       <small class="text-muted">Par <%= comment.user.first_name %> le <%= comment.created_at.strftime("%d/%m/%Y") %></small>
+      <%= link_to "Modifier", edit_gossip_comment_path(@gossip.id, comment.id), class: "btn btn-sm btn-outline-secondary" %>
     </div>
-  <% end %>
+  </div>
+<% end %>
 </div>
 
 <%# Formulaire de création %>
