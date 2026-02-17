@@ -1,0 +1,23 @@
+<div class="container mt-5">
+  <div class="jumbotron shadow">
+    <h1 class="display-4"><%= @city.name %></h1>
+    <p class="lead">Code postal : <%= @city.zip_code %></p>
+    <hr class="my-4">
+    <p>Découvre tous les potins postés par les habitants de cette ville.</p>
+  </div>
+
+  <h2 class="mb-4">Les potins de la ville</h2>
+  <div class="row">
+    <% @gossips.each do |gossip| %>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title text-primary"><%= gossip.title %></h5>
+            <p class="card-text text-muted">Auteur : <strong><%= gossip.user.first_name %></strong></p>
+            <%= link_to "Voir le potin", gossip_path(gossip.id), class: "btn btn-outline-primary" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

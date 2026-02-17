@@ -31,7 +31,7 @@
 
 <%# Liste des commentaires %>
 <div class="list-group mb-4">
-  <% @gossip.comments.each do |comment| %>
+  <% @gossip.comments.select(&:persisted?).each do |comment| %>
     <div class="list-group-item">
       <p class="mb-1"><%= comment.content %></p>
       <small class="text-muted">Par <%= comment.user.first_name %> le <%= comment.created_at.strftime("%d/%m/%Y") %></small>

@@ -1,9 +1,11 @@
 class CommentsController < ApplicationController
   def create
     @gossip = Gossip.find(params[:gossip_id])
+    
+    # On utilise l'association polymorphique ici
     @comment = Comment.new(
       content: params[:content], 
-      gossip: @gossip, 
+      commentable: @gossip, # On remplace 'gossip' par 'commentable'
       user: User.find_by(first_name: "Anonymous")
     )
 
@@ -11,7 +13,7 @@ class CommentsController < ApplicationController
       flash[:success] = "Commentaire ajouté !"
       redirect_to gossip_path(@gossip)
     else
-      flash[:danger] = "Le commentaire ne peut pas être vide."
+      flash[:danger] = "Erreur lors de l'ajout du commentaire."
       redirect_to gossip_path(@gossip)
     end
   end

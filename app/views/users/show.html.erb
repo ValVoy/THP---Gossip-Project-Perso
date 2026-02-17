@@ -3,6 +3,6 @@
   <hr>
   <p><strong>Email :</strong> <%= @user.email %></p>
   <p><strong>Âge :</strong> <%= @user.age %> ans</p>
-  <p><strong>Ville :</strong> <%= @user.city.name %> (<%= @user.city.zip_code %>)</p>
+  <p><strong>Ville :</strong> <%= link_to @user.city.name, city_path(@user.city.id) %> (<%= @user.city.zip_code %>)</p>
   <p><strong>Description :</strong> <%= @user.description %></p>
 </div>

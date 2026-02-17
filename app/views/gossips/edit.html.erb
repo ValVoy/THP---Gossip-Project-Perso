@@ -1,0 +1,22 @@
+<div class="container mt-5">
+  <h1>Modifier le potin</h1>
+
+  <% if @gossip.errors.any? %>
+    <div class="alert alert-danger">
+      <ul><% @gossip.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %></ul>
+    </div>
+  <% end %>
+
+  <%# On précise l'URL et la méthode PATCH pour l'update %>
+  <%= form_tag gossip_path(@gossip.id), method: "patch", data: { turbo: false } do %>
+    <div class="mb-3">
+      <%= label_tag :title, "Titre" %>
+      <%= text_field_tag :title, @gossip.title, class: "form-control" %>
+    </div>
+    <div class="mb-3">
+      <%= label_tag :content, "Contenu" %>
+      <%= text_area_tag :content, @gossip.content, class: "form-control" %>
+    </div>
+    <%= submit_tag "Mettre à jour", class: "btn btn-warning" %>
+  <% end %>
+</div>
