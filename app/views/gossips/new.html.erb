@@ -3,7 +3,6 @@
     <div class="col-md-8">
       <h1 class="text-center mb-4">Partage un nouveau potin ! 🗣️</h1>
 
-      <%# Affichage des erreurs si la validation échoue (Consigne 2.2.3.1) %>
       <% if @gossip.errors.any? %>
         <div class="alert alert-danger">
           <p>Le potin n'a pas pu être sauvegardé pour les raisons suivantes :</p>
@@ -15,7 +14,6 @@
         </div>
       <% end %>
 
-      <%# Formulaire avec form_tag (Consigne 2.2.2) %>
       <%= form_tag gossips_path, method: "post", data: { turbo: false } do %>
         
         <div class="mb-3">
@@ -26,6 +24,13 @@
         <div class="mb-3">
           <%= label_tag :content, "Le contenu croustillant", class: "form-label" %>
           <%= text_area_tag :content, @gossip.content, class: "form-control", rows: 5, placeholder: "Raconte tout ici..." %>
+        </div>
+
+        <%# --- AJOUT DU SELECT TAG ICI --- %>
+        <div class="mb-4">
+          <%= label_tag :tag, "Choisir un Tag", class: "form-label" %>
+          <%= select_tag :tag, options_from_collection_for_select(@all_tags, "id", "title"), class: "form-select" %>
+          <small class="text-muted">Donne une catégorie à ton ragot !</small>
         </div>
 
         <div class="text-center">

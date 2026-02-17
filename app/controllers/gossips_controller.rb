@@ -5,12 +5,13 @@ class GossipsController < ApplicationController
 
   def show
     @gossip = Gossip.find(params[:id])
-    # On prépare un objet vide pour le formulaire de commentaire dans la vue show
     @comment = Comment.new 
   end
 
   def new
     @gossip = Gossip.new
+    # ÉTAPE 2 : On charge tous les tags pour les envoyer à la vue
+    @all_tags = Tag.all
   end
 
   def create
@@ -21,26 +22,30 @@ class GossipsController < ApplicationController
     )
 
     if @gossip.save
+      JoinTableGossipTag.create(gossip: @gossip, tag: Tag.find(params[:tag]))
+
       flash[:success] = "Potin créé !"
       redirect_to root_path
     else
+      @all_tags = Tag.all
       render :new
     end
   end
 
-  # --- NOUVELLES MÉTHODES DU JOUR ---
-
   def edit
     @gossip = Gossip.find(params[:id])
+    @all_tags = Tag.all
   end
 
   def update
     @gossip = Gossip.find(params[:id])
-    # On met à jour avec les données du formulaire edit
     if @gossip.update(title: params[:title], content: params[:content])
+      @gossip.join_table_gossip_tags.destroy_all 
+      JoinTableGossipTag.create(gossip: @gossip, tag: Tag.find(params[:tag]))
       flash[:success] = "Potin mis à jour !"
       redirect_to gossip_path(@gossip.id)
     else
+      @all_tags = Tag.all
       render :edit
     end
   end
