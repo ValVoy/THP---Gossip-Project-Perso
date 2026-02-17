@@ -183,6 +183,33 @@ The application has transitioned from a backend-only project to a functional web
 
 ---
 
+## 🛠 Advanced Web Features (V2 Implementation)
+
+The application has evolved into a fully interactive platform with complete resource management:
+
+### 1. Full Gossip CRUD (Create, Read, Update, Delete)
+- **Interactive Creation**: A new gossip form with real-time **ActiveRecord validations** and error message displays.
+- **Seamless Editing**: Pre-filled forms using `patch` methods to modify titles and content.
+- **Secure Deletion**: Implementation of the `destroy` action with confirmation alerts using **Turbo** (Rails 8+).
+
+### 2. Full Comment System (Polymorphic CRUD)
+- **Nested Resources**: Comments are architecturally nested within Gossips (`/gossips/:id/comments`).
+- **Interactive Feed**: Users can post comments directly from the gossip view.
+- **Comment Management**: Dedicated `edit` and `delete` actions for comments, allowing users to moderate their own feedback.
+- **Dynamic Counters**: Live display of the number of comments on the index cards and gossip show page.
+
+### 3. Integrated Tagging System (God Mode Bonus)
+- **Categorization**: Users can select a **Tag** from a dynamic dropdown menu (`select_tag`) when creating a new gossip.
+- **Join Table Persistence**: Automatic creation and update of links in the `JoinTableGossipTag` during gossip creation and editing.
+- **Smart Selection**: The edit form automatically pre-selects the gossip's current tag for better UX.
+
+### 4. Urban & User Exploration
+- **City Directory**: A dedicated page for each city (`cities/show`) listing all the "gossips" posted by local residents.
+- **Interconnected UI**: Deep linking between Gossips, Authors, and Cities (e.g., clicking an author's city in a gossip takes you to the city's board).
+
+---
+
+
 ## 🚀 How to Run the App
 
 1. **Launch the server**:
