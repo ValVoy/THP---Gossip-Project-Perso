@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user
-  before_action :require_owner, only: [:edit, :update, :destroy]
+  before_action :require_owner, only: [ :edit, :update, :destroy ]
 
   def create
     @gossip = Gossip.find(params[:gossip_id])

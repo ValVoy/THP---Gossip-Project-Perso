@@ -1,7 +1,7 @@
 class GossipsController < ApplicationController
   # Filtres de sécurité
-  before_action :authenticate_user, only: [:new, :create, :show, :edit, :update, :destroy]
-  before_action :require_owner, only: [:edit, :update, :destroy]
+  before_action :authenticate_user, only: [ :new, :create, :show, :edit, :update, :destroy ]
+  before_action :require_owner, only: [ :edit, :update, :destroy ]
 
   def index
     @gossips = Gossip.all.order(created_at: :desc)
@@ -9,7 +9,7 @@ class GossipsController < ApplicationController
 
   def show
     @gossip = Gossip.find(params[:id])
-    @comment = Comment.new 
+    @comment = Comment.new
   end
 
   def new
@@ -19,14 +19,14 @@ class GossipsController < ApplicationController
 
   def create
     @gossip = Gossip.new(gossip_params)
-    @gossip.user = current_user 
+    @gossip.user = current_user
 
     if @gossip.save
       JoinTableGossipTag.create(gossip: @gossip, tag: Tag.find(params[:tag])) if params[:tag].present?
       flash[:success] = "Potin créé avec succès !"
       redirect_to root_path
     else
-      @all_tags = Tag.all 
+      @all_tags = Tag.all
       render :new, status: :unprocessable_entity
     end
   end
@@ -37,7 +37,7 @@ class GossipsController < ApplicationController
 
   def update
     if @gossip.update(title: params[:title], content: params[:content])
-      @gossip.join_table_gossip_tags.destroy_all 
+      @gossip.join_table_gossip_tags.destroy_all
       JoinTableGossipTag.create(gossip: @gossip, tag: Tag.find(params[:tag])) if params[:tag].present?
       flash[:success] = "Potin mis à jour !"
       redirect_to gossip_path(@gossip.id)

@@ -3,8 +3,8 @@ class CommentsController < ApplicationController
     @gossip = Gossip.find(params[:gossip_id])
     # Rappel : on utilise commentable car ta table est polymorphique
     @comment = Comment.new(
-      content: params[:content], 
-      commentable: @gossip, 
+      content: params[:content],
+      commentable: @gossip,
       user: User.find_by(first_name: "Anonymous")
     )
 
@@ -25,7 +25,7 @@ class CommentsController < ApplicationController
   def update
     @gossip = Gossip.find(params[:gossip_id])
     @comment = Comment.find(params[:id])
-    
+
     if @comment.update(content: params[:content])
       flash[:success] = "Commentaire mis à jour !"
       redirect_to gossip_path(@gossip)

@@ -48,7 +48,7 @@ end
 puts "✅ 20 gossips créés."
 
 # --- TAGS ---
-["#Hot", "#Work", "#Love", "#Secret", "#Humour", "#Life", "#Drama"].each do |title|
+[ "#Hot", "#Work", "#Love", "#Secret", "#Humour", "#Life", "#Drama" ].each do |title|
   Tag.create!(title: title)
 end
 puts "✅ Tags créés."
@@ -99,7 +99,7 @@ puts "✅ 20 commentaires créés (Gossips + Réponses)."
 40.times do
   user = User.all.sample
   # On like soit un Gossip, soit un Commentaire
-  target = [Gossip.all.sample, Comment.all.sample].sample
+  target = [ Gossip.all.sample, Comment.all.sample ].sample
   unless Like.exists?(user: user, likeable: target)
     Like.create!(user: user, likeable: target)
   end
