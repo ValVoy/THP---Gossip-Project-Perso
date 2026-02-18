@@ -1,2 +1,29 @@
-<h1>Sessions#new</h1>
-<p>Find me in app/views/sessions/new.html.erb</p>
+<div class="row justify-content-center">
+  <div class="col-md-5">
+    <div class="card shadow-lg p-4 mt-5">
+      <div class="card-body text-center">
+        <h2 class="fw-bold mb-4 text-gradient">Connexion</h2>
+        
+        <%= form_tag sessions_path, method: :post do %>
+          <div class="text-start mb-3">
+            <%= label_tag :email, "Email", class: "form-label" %>
+            <%= email_field_tag :email, params[:email], class: "form-control bg-dark text-white border-secondary" %>
+          </div>
+
+          <div class="text-start mb-4">
+            <%= label_tag :password, "Mot de passe", class: "form-label" %>
+            <%= password_field_tag :password, nil, class: "form-control bg-dark text-white border-secondary" %>
+          </div>
+
+          <div class="d-grid gap-2">
+            <%= submit_tag "Me connecter", class: "btn btn-primary btn-lg rounded-pill fw-bold" %>
+          </div>
+        <% end %>
+
+        <div class="mt-4">
+          <small class="text-muted">Pas encore de compte ? <%= link_to "S'inscrire", new_user_path, class: "text-info text-decoration-none" %></small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
