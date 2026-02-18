@@ -5,10 +5,8 @@
       <span class="text-secondary small">Posté le <%= @gossip.created_at.strftime("%d %b %Y") %></span>
     </div>
 
-    <%# --- BLOC LIKES --- %>
     <div class="d-flex align-items-center bg-dark px-3 py-1 rounded-pill border border-secondary">
       <% if logged_in? %>
-        <%# On cherche si l'utilisateur a déjà liké ce potin %>
         <% pre_like = @gossip.likes.find { |like| like.user_id == current_user.id } %>
         <% if pre_like %>
           <%= button_to '❤️', gossip_like_path(@gossip, pre_like), method: :delete, class: "btn btn-link text-decoration-none p-0 border-0 fs-5" %>
@@ -42,11 +40,18 @@
     </div>
   </div>
 
-  <%# ACTIONS AUTEUR %>
   <% if logged_in? && current_user == @gossip.user %>
-    <div class="mt-5 pt-4 border-top border-secondary d-flex gap-2">
+    <div class="mt-5 pt-4 border-top border-secondary d-flex align-items-center gap-3">
       <%= link_to "Modifier", edit_gossip_path(@gossip.id), class: "btn btn-outline-warning btn-sm px-4 rounded-pill" %>
-      <%= link_to "Supprimer", gossip_path(@gossip.id), data: { turbo_method: :delete, turbo_confirm: "Sûr ?" }, class: "btn btn-link text-danger btn-sm text-decoration-none" %>
+      
+      <%# Bouton de suppression corrigé pour Turbo %>
+      <%= button_to gossip_path(@gossip.id), 
+          method: :delete, 
+          form: { data: { turbo_confirm: "Voulez-vous vraiment supprimer ce potin ?" } }, 
+          class: "btn btn-link text-danger btn-sm text-decoration-none p-0 border-0",
+          style: "line-height: inherit; font-size: 0.875rem;" do %>
+        Supprimer
+      <% end %>
     </div>
   <% end %>
 </div>
@@ -62,7 +67,10 @@
           <div class="d-flex justify-content-between align-items-center border-top border-secondary pt-2">
             <small class="text-muted">Par <span class="text-primary"><%= comment.user.first_name %></span></small>
             <% if logged_in? && current_user == comment.user %>
-              <%= link_to "Éditer", edit_gossip_comment_path(@gossip.id, comment.id), class: "text-warning small text-decoration-none" %>
+              <div class="d-flex gap-2">
+                <%= link_to "Éditer", edit_gossip_comment_path(@gossip.id, comment.id), class: "text-warning small text-decoration-none" %>
+                <%= button_to "Supprimer", gossip_comment_path(@gossip.id, comment.id), method: :delete, form: { data: { turbo_confirm: "Supprimer ce commentaire ?" } }, class: "text-danger small bg-transparent border-0 p-0 text-decoration-none" %>
+              </div>
             <% end %>
           </div>
         </div>
