@@ -36,3 +36,5 @@ end
 gem "foreman", "~> 0.90.0"
 
 gem "cssbundling-rails"
+
+gem "bcrypt" 

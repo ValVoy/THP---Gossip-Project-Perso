@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "sessions/new"
+  get "sessions/create"
+  get "sessions/destroy"
   # On change la racine : elle pointe maintenant vers static_pages#home
   root "static_pages#home"
 
