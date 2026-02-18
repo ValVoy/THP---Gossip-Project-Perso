@@ -1,43 +1,46 @@
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-8">
-      <h1 class="text-center mb-4">Partage un nouveau potin ! 🗣️</h1>
-
-      <% if @gossip.errors.any? %>
-        <div class="alert alert-danger">
-          <p>Le potin n'a pas pu être sauvegardé pour les raisons suivantes :</p>
-          <ul>
-            <% @gossip.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-
-      <%= form_tag gossips_path, method: "post", data: { turbo: false } do %>
+      <div class="card shadow-lg p-4 rounded-5 border-0" style="background: linear-gradient(145deg, #161b22, #0d1117); border: 1px solid #30363d !important;">
         
-        <div class="mb-3">
-          <%= label_tag :title, "Titre du potin", class: "form-label" %>
-          <%= text_field_tag :title, @gossip.title, class: "form-control", placeholder: "Un titre percutant (3-14 caractères)" %>
-        </div>
+        <h1 class="text-white fw-bold mb-4 text-center text-gradient">Nouveau Potin 🗣️</h1>
 
-        <div class="mb-3">
-          <%= label_tag :content, "Le contenu croustillant", class: "form-label" %>
-          <%= text_area_tag :content, @gossip.content, class: "form-control", rows: 5, placeholder: "Raconte tout ici..." %>
-        </div>
+        <%# --- BLOC D'ERREURS --- %>
+        <% if @gossip.errors.any? %>
+          <div class="alert alert-danger border-0 rounded-4 shadow-sm mb-4">
+            <h6 class="fw-bold"><%= pluralize(@gossip.errors.count, "erreur") %> empêche(nt) la publication :</h6>
+            <ul class="mb-0 small">
+              <% @gossip.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
 
-        <%# --- AJOUT DU SELECT TAG ICI --- %>
-        <div class="mb-4">
-          <%= label_tag :tag, "Choisir un Tag", class: "form-label" %>
-          <%= select_tag :tag, options_from_collection_for_select(@all_tags, "id", "title"), class: "form-select" %>
-          <small class="text-muted">Donne une catégorie à ton ragot !</small>
-        </div>
+        <%= form_tag gossips_path, method: "post" do %>
+          <div class="mb-4">
+            <label class="form-label text-muted small text-uppercase fw-bold">Titre du potin</label>
+            <%= text_field_tag 'title', @gossip.title, class: "form-control bg-dark text-white border-secondary rounded-3", placeholder: "Entre 3 et 14 caractères..." %>
+            <div class="form-text text-muted small">Sois percutant, mais bref !</div>
+          </div>
 
-        <div class="text-center">
-          <%= submit_tag "Publier le potin", class: "btn btn-primary btn-lg" %>
-        </div>
+          <div class="mb-4">
+            <label class="form-label text-muted small text-uppercase fw-bold">Le contenu croustillant</label>
+            <%= text_area_tag 'content', @gossip.content, rows: 6, class: "form-control bg-dark text-white border-secondary rounded-3", placeholder: "Raconte tout..." %>
+          </div>
 
-      <% end %>
+          <div class="mb-4">
+            <label class="form-label text-muted small text-uppercase fw-bold">Catégorie (Tag)</label>
+            <%= select_tag 'tag', options_from_collection_for_select(@all_tags, "id", "title"), class: "form-select bg-dark text-white border-secondary rounded-3" %>
+          </div>
+
+          <div class="d-grid gap-2 mt-5">
+            <%= submit_tag "Balancer le potin !", class: "btn btn-primary btn-lg rounded-pill fw-bold shadow-sm" %>
+            <%= link_to "Annuler", root_path, class: "btn btn-link text-muted text-decoration-none small" %>
+          </div>
+        <% end %>
+
+      </div>
     </div>
   </div>
 </div>

@@ -1,5 +1,6 @@
 require "faker"
 
+puts "Nettoyage de la base de données..."
 Like.destroy_all
 Comment.destroy_all
 PrivateMessageRecipient.destroy_all
@@ -10,7 +11,7 @@ Tag.destroy_all
 User.destroy_all
 City.destroy_all
 
-puts "Base de données nettoyée."
+puts "Base de données propre. Début du seed..."
 
 # --- VILLES ---
 10.times do
@@ -19,47 +20,49 @@ puts "Base de données nettoyée."
     zip_code: Faker::Address.zip_code
   )
 end
-puts "10 villes créées."
+puts "✅ 10 villes créées."
 
 # --- UTILISATEURS ---
-10.times do
+10.times do |i|
   User.create!(
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
     description: Faker::Lorem.paragraph(sentence_count: 2),
-    email: Faker::Internet.email,
+    email: "user#{i}@yopmail.com",
     age: rand(18..70),
-    city: City.all.sample
+    city: City.all.sample,
+    password: "password123",
+    password_confirmation: "password123"
   )
 end
-puts "10 utilisateurs créés."
+puts "✅ 10 utilisateurs créés."
 
 # --- GOSSIPS ---
 20.times do
   Gossip.create!(
-    title: Faker::Lorem.sentence(word_count: 3),
+    title: Faker::Lorem.characters(number: rand(5..12)),
     content: Faker::Lorem.paragraph(sentence_count: 4),
     user: User.all.sample
   )
 end
-puts "20 gossips créés."
+puts "✅ 20 gossips créés."
 
 # --- TAGS ---
-10.times do
-  Tag.create!(title: "##{Faker::Lorem.word}")
+["#Hot", "#Work", "#Love", "#Secret", "#Humour", "#Life", "#Drama"].each do |title|
+  Tag.create!(title: title)
 end
-puts "10 tags créés."
+puts "✅ Tags créés."
 
-# --- LIEN GOSSIP / TAG (chaque gossip a au moins un tag) ---
-Gossip.find_each do |gossip|
-  tags = Tag.all.sample(rand(1..3))
+# --- LIEN GOSSIP / TAG ---
+Gossip.all.each do |gossip|
+  tags = Tag.all.sample(rand(1..2))
   tags.each do |tag|
     JoinTableGossipTag.create!(gossip: gossip, tag: tag)
   end
 end
-puts "Tags assignés aux gossips."
+puts "✅ Tags assignés."
 
-# --- MESSAGES PRIVÉS (expéditeur + un ou plusieurs destinataires) ---
+# --- MESSAGES PRIVÉS ---
 15.times do
   pm = PrivateMessage.create!(
     content: Faker::Lorem.paragraph(sentence_count: 2),
@@ -70,36 +73,37 @@ puts "Tags assignés aux gossips."
     PrivateMessageRecipient.create!(private_message: pm, recipient: recipient)
   end
 end
-puts "Messages privés créés."
+puts "✅ 15 messages privés."
 
-# --- COMMENTAIRES (sur gossips et commentaires de commentaires) ---
-# D'abord des commentaires sur des gossips
-12.times do
+# --- COMMENTAIRES ---
+# Étape A : Créer des commentaires uniquement sur des Gossips (pour être sûr qu'ils existent)
+15.times do
   Comment.create!(
-    content: Faker::Lorem.paragraph(sentence_count: 2),
+    content: Faker::Lorem.sentence(word_count: 10),
     user: User.all.sample,
     commentable: Gossip.all.sample
   )
 end
-# Puis des commentaires de commentaires (réponses à des commentaires existants)
-8.times do
-  parent_comment = Comment.all.sample
+
+# Étape B : Créer des réponses à des commentaires (Maintenant que le pool de commentaires n'est plus vide)
+5.times do
   Comment.create!(
-    content: Faker::Lorem.sentence(word_count: 6),
+    content: Faker::Lorem.sentence(word_count: 8),
     user: User.all.sample,
-    commentable: parent_comment
+    commentable: Comment.all.sample
   )
 end
-puts "20 commentaires créés (dont commentaires de commentaires)."
+puts "✅ 20 commentaires créés (Gossips + Réponses)."
 
-# --- LIKES (sur gossips ou commentaires au hasard) ---
-likes_count = 0
-while likes_count < 20
-  likeable = [ Gossip.all.sample, Comment.all.sample ].sample
+# --- LIKES ---
+40.times do
   user = User.all.sample
-  next if Like.exists?(user: user, likeable: likeable)
-
-  Like.create!(user: user, likeable: likeable)
-  likes_count += 1
+  # On like soit un Gossip, soit un Commentaire
+  target = [Gossip.all.sample, Comment.all.sample].sample
+  unless Like.exists?(user: user, likeable: target)
+    Like.create!(user: user, likeable: target)
+  end
 end
-puts "20 likes créés. Seed terminé."
+puts "✅ Likes distribués."
+
+puts "--- SEED TERMINÉ AVEC SUCCÈS ---"

@@ -5,9 +5,10 @@
       <span class="text-secondary small">Posté le <%= @gossip.created_at.strftime("%d %b %Y") %></span>
     </div>
 
-    <%# --- SYSTÈME DE LIKE --- %>
-    <div class="d-flex align-items-center bg-dark px-3 py-1 rounded-pill border border-secondary shadow-sm">
+    <%# --- BLOC LIKES --- %>
+    <div class="d-flex align-items-center bg-dark px-3 py-1 rounded-pill border border-secondary">
       <% if logged_in? %>
+        <%# On cherche si l'utilisateur a déjà liké ce potin %>
         <% pre_like = @gossip.likes.find { |like| like.user_id == current_user.id } %>
         <% if pre_like %>
           <%= button_to '❤️', gossip_like_path(@gossip, pre_like), method: :delete, class: "btn btn-link text-decoration-none p-0 border-0 fs-5" %>
@@ -25,77 +26,59 @@
   <p class="fs-5 leading-relaxed mb-5 text-secondary"><%= @gossip.content %></p>
 
   <div class="d-flex flex-wrap gap-3">
-    <%# Carte Auteur %>
     <div class="card p-2 px-3 rounded-4 border-secondary d-flex flex-row align-items-center bg-transparent">
       <div class="me-3 fs-3">🧔</div>
       <div>
-        <small class="text-muted d-block" style="font-size: 0.7rem; text-transform: uppercase;">Auteur</small>
+        <small class="text-muted d-block" style="font-size: 0.7rem;">Auteur</small>
         <%= link_to @gossip.user.first_name, user_path(@gossip.user.id), class: "fw-bold text-decoration-none text-primary" %>
       </div>
     </div>
-
-    <%# Carte Ville %>
     <div class="card p-2 px-3 rounded-4 border-secondary d-flex flex-row align-items-center bg-transparent">
       <div class="me-3 fs-3">📍</div>
       <div>
-        <small class="text-muted d-block" style="font-size: 0.7rem; text-transform: uppercase;">Ville</small>
+        <small class="text-muted d-block" style="font-size: 0.7rem;">Ville</small>
         <%= link_to @gossip.user.city.name, city_path(@gossip.user.city.id), class: "fw-bold text-decoration-none text-primary" %>
       </div>
     </div>
   </div>
 
-  <%# --- ACTIONS : SEUL L'AUTEUR VOIT ÇA --- %>
+  <%# ACTIONS AUTEUR %>
   <% if logged_in? && current_user == @gossip.user %>
     <div class="mt-5 pt-4 border-top border-secondary d-flex gap-2">
-      <%= link_to "Modifier le potin", edit_gossip_path(@gossip.id), class: "btn btn-outline-warning btn-sm px-4 rounded-pill" %>
-      <%= link_to "Supprimer", gossip_path(@gossip.id), data: { turbo_method: :delete, turbo_confirm: "Romain, es-tu sûr de vouloir supprimer ce collaborateur... euh, ce potin ?" }, class: "btn btn-link text-danger btn-sm text-decoration-none" %>
+      <%= link_to "Modifier", edit_gossip_path(@gossip.id), class: "btn btn-outline-warning btn-sm px-4 rounded-pill" %>
+      <%= link_to "Supprimer", gossip_path(@gossip.id), data: { turbo_method: :delete, turbo_confirm: "Sûr ?" }, class: "btn btn-link text-danger btn-sm text-decoration-none" %>
     </div>
   <% end %>
 </div>
 
 <div class="row">
   <div class="col-lg-8 mx-auto">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h3 class="fw-bold m-0 text-white">Commentaires</h3>
-      <span class="badge bg-secondary rounded-pill px-3"><%= @gossip.comments.count %></span>
-    </div>
+    <h3 class="fw-bold mb-4 text-white">Commentaires (<%= @gossip.comments.count %>)</h3>
 
-    <%# --- BOUCLE DES COMMENTAIRES --- %>
     <% @gossip.comments.select(&:persisted?).each do |comment| %>
-      <div class="card mb-3 border-secondary shadow-sm rounded-4" style="background-color: #161b22;">
+      <div class="card mb-3 border-secondary rounded-4" style="background-color: #161b22;">
         <div class="card-body">
-          <p class="mb-3 text-secondary"><%= comment.content %></p>
+          <p class="mb-2 text-secondary"><%= comment.content %></p>
           <div class="d-flex justify-content-between align-items-center border-top border-secondary pt-2">
-            <div class="d-flex align-items-center">
-              <span class="small text-muted">Par <span class="text-primary fw-bold"><%= comment.user.first_name %></span></span>
-            </div>
-            
-            <%# Actions sur commentaires : SEUL L'AUTEUR %>
+            <small class="text-muted">Par <span class="text-primary"><%= comment.user.first_name %></span></small>
             <% if logged_in? && current_user == comment.user %>
-              <div class="d-flex gap-2">
-                <%= link_to "Éditer", edit_gossip_comment_path(@gossip.id, comment.id), class: "text-warning small text-decoration-none" %>
-              </div>
+              <%= link_to "Éditer", edit_gossip_comment_path(@gossip.id, comment.id), class: "text-warning small text-decoration-none" %>
             <% end %>
           </div>
         </div>
       </div>
     <% end %>
 
-    <%# --- FORMULAIRE D'AJOUT (Visible seulement si connecté) --- %>
     <% if logged_in? %>
-      <div class="card mt-5 p-4 border-0 shadow-lg rounded-4 text-white" style="background: linear-gradient(135deg, #0d6efd, #6610f2);">
+      <div class="card mt-5 p-4 border-0 rounded-4 text-white" style="background: linear-gradient(135deg, #0d6efd, #6610f2);">
         <h5 class="mb-3 fw-bold">Ajouter un commentaire</h5>
         <%= form_tag gossip_comments_path(@gossip.id), method: "post" do %>
-          <%= text_area_tag 'content', nil, class: 'form-control border-0 mb-3 shadow-sm', placeholder: "Écris quelque chose d'intelligent (ou pas)...", rows: 3, style: "background: rgba(255,255,255,0.1); color: white;" %>
-          <%= submit_tag "Publier le commentaire", class: "btn btn-light text-primary fw-bold rounded-pill px-4" %>
+          <%= text_area_tag 'content', nil, class: 'form-control border-0 mb-3 shadow-sm', placeholder: "Ton avis...", rows: 3, style: "background: rgba(255,255,255,0.1); color: white;" %>
+          <%= submit_tag "Commenter", class: "btn btn-light text-primary fw-bold rounded-pill px-4" %>
         <% end %>
       </div>
     <% else %>
-      <div class="card mt-5 p-4 border-secondary text-center rounded-4 bg-dark">
-        <p class="text-muted m-0">
-          Envie de commenter ? <%= link_to "Connecte-toi", new_session_path, class: "text-primary fw-bold text-decoration-none" %> pour rejoindre la discussion.
-        </p>
-      </div>
+      <div class="text-center mt-4"><p class="text-muted">Connecte-toi pour commenter !</p></div>
     <% end %>
   </div>
 </div>

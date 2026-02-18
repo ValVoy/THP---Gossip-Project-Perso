@@ -1,22 +1,39 @@
 <div class="container mt-5">
-  <div class="jumbotron shadow">
-    <h1 class="display-4"><%= @city.name %></h1>
-    <p class="lead">Code postal : <%= @city.zip_code %></p>
-    <hr class="my-4">
-    <p>Découvre tous les potins postés par les habitants de cette ville.</p>
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><%= link_to "Toutes les villes", cities_path, class: "text-decoration-none" %></li>
+      <li class="breadcrumb-item active text-white" aria-current="page"><%= @city.name %></li>
+    </ol>
+  </nav>
+
+  <div class="jumbotron p-5 mb-5 rounded-5 border border-secondary" style="background: linear-gradient(135deg, #161b22, #0d1117);">
+    <h1 class="display-5 fw-bold text-gradient">Bienvenue à <%= @city.name %></h1>
+    <p class="lead text-secondary">Retrouve ici tous les potins croustillants de cette ville (<%= @city.zip_code %>).</p>
   </div>
 
-  <h2 class="mb-4">Les potins de la ville</h2>
   <div class="row">
-    <% @gossips.each do |gossip| %>
-      <div class="col-md-4 mb-4">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body">
-            <h5 class="card-title text-primary"><%= gossip.title %></h5>
-            <p class="card-text text-muted">Auteur : <strong><%= gossip.user.first_name %></strong></p>
-            <%= link_to "Voir le potin", gossip_path(gossip.id), class: "btn btn-outline-primary" %>
+    <% if @city_gossips.any? %>
+      <% @city_gossips.each do |gossip| %>
+        <div class="col-md-6 mb-4">
+          <div class="card h-100 border-secondary" style="background-color: #161b22;">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between mb-2">
+                <span class="badge bg-primary-subtle text-primary rounded-pill">Gossip #<%= gossip.id %></span>
+                <small class="text-muted"><%= gossip.created_at.strftime("%d/%m/%Y") %></small>
+              </div>
+              <h4 class="fw-bold mb-3"><%= link_to gossip.title, gossip_path(gossip.id), class: "text-white text-decoration-none" %></h4>
+              <p class="text-secondary small mb-4"><%= truncate(gossip.content, length: 150) %></p>
+              <div class="d-flex justify-content-between align-items-center border-top border-secondary pt-3">
+                <span class="text-muted small">Par <strong><%= link_to gossip.user.first_name, user_path(gossip.user.id), class: "text-primary text-decoration-none" %></strong></span>
+                <%= link_to "Voir plus", gossip_path(gossip.id), class: "btn btn-outline-primary btn-sm rounded-pill px-3" %>
+              </div>
+            </div>
           </div>
         </div>
+      <% end %>
+    <% else %>
+      <div class="col-12 text-center py-5">
+        <p class="text-muted fs-4">C'est bien calme ici... Aucun potin à <%= @city.name %> pour le moment.</p>
       </div>
     <% end %>
   </div>

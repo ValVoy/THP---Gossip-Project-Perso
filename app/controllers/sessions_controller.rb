@@ -17,6 +17,7 @@ class SessionsController < ApplicationController
 
   def destroy
     session.delete(:user_id)
+    flash[:success] = "À bientôt !"
     redirect_to root_path
   end
 end

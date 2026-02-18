@@ -1,8 +1,98 @@
-<div class="card p-5 shadow">
-  <h2>Profil de <%= @user.first_name %> <%= @user.last_name %></h2>
-  <hr>
-  <p><strong>Email :</strong> <%= @user.email %></p>
-  <p><strong>Âge :</strong> <%= @user.age %> ans</p>
-  <p><strong>Ville :</strong> <%= link_to @user.city.name, city_path(@user.city.id) %> (<%= @user.city.zip_code %>)</p>
-  <p><strong>Description :</strong> <%= @user.description %></p>
+<div class="container mt-5">
+  <div class="row">
+    
+    <%# --- COLONNE GAUCHE : INFOS PROFIL --- %>
+    <div class="col-lg-4">
+      <div class="card shadow-lg border-0 rounded-5 overflow-hidden mb-4" style="background: linear-gradient(145deg, #161b22, #0d1117); border: 1px solid #30363d !important;">
+        <div class="card-body text-center p-5">
+          <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center mb-4 shadow" style="width: 100px; height: 100px; font-size: 3rem;">
+            <%= @user.first_name[0].upcase %>
+          </div>
+          <h2 class="fw-bold text-gradient mb-1"><%= @user.first_name %> <%= @user.last_name %></h2>
+          <p class="text-muted small mb-4">Membre depuis le <%= @user.created_at.strftime("%d %B %Y") %></p>
+          
+          <div class="d-flex justify-content-center gap-3 mb-4">
+            <div class="px-3 py-2 bg-dark rounded-4 border border-secondary shadow-sm">
+              <span class="d-block fw-bold text-primary"><%= @user.age %></span>
+              <small class="text-muted">ans</small>
+            </div>
+            <div class="px-3 py-2 bg-dark rounded-4 border border-secondary shadow-sm">
+              <span class="d-block fw-bold text-primary"><%= @user.gossips.count %></span>
+              <small class="text-muted">Potins</small>
+            </div>
+          </div>
+
+          <hr class="border-secondary my-4">
+
+          <div class="text-start">
+            <label class="text-muted small text-uppercase fw-bold mb-2">Description</label>
+            <p class="text-secondary small leading-relaxed">
+              <%= @user.description.present? ? @user.description : "Cet utilisateur n'a pas encore de bio..." %>
+            </p>
+            
+            <label class="text-muted small text-uppercase fw-bold mt-4 mb-2">Localisation</label>
+            <div class="d-flex align-items-center">
+              <span class="me-2">📍</span>
+              <%= link_to @user.city.name, city_path(@user.city.id), class: "text-info text-decoration-none fw-bold" %>
+            </div>
+
+            <label class="text-muted small text-uppercase fw-bold mt-4 mb-2">Contact</label>
+            <div class="d-flex align-items-center">
+              <span class="me-2">📧</span>
+              <span class="text-secondary small"><%= @user.email %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%# --- COLONNE DROITE : LISTE DES POTINS --- %>
+    <div class="col-lg-8">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-white m-0">Les potins de <%= @user.first_name %></h3>
+        <span class="badge bg-dark border border-secondary text-primary px-3 py-2 rounded-pill"><%= @user_gossips.count %> publications</span>
+      </div>
+
+      <% if @user_gossips.any? %>
+        <div class="row g-4">
+          <% @user_gossips.each do |gossip| %>
+            <div class="col-md-12">
+              <div class="card h-100 shadow-sm border-secondary hover-effect" style="background-color: #161b22; transition: transform 0.2s;">
+                <div class="card-body p-4">
+                  <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h5 class="card-title fw-bold m-0">
+                      <%= link_to gossip.title, gossip_path(gossip.id), class: "text-white text-decoration-none" %>
+                    </h5>
+                    <small class="text-muted"><%= gossip.created_at.strftime("%d/%m/%y") %></small>
+                  </div>
+                  <p class="text-secondary small mb-3">
+                    <%= truncate(gossip.content, length: 120) %>
+                  </p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="text-danger small">❤️ <%= gossip.likes.count %></span>
+                      <span class="text-info small">💬 <%= gossip.comments.count %></span>
+                    </div>
+                    <%= link_to "Lire la suite →", gossip_path(gossip.id), class: "btn btn-link btn-sm text-primary text-decoration-none p-0" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center p-5 bg-dark rounded-5 border border-dashed border-secondary">
+          <p class="text-muted">Cet utilisateur n'a pas encore posté de potins.</p>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
 </div>
+
+<style>
+  .hover-effect:hover {
+    transform: translateY(-5px);
+    border-color: #58a6ff !important;
+  }
+</style>
