@@ -16,6 +16,8 @@
 /config/*.key
 .cursor
 
+pastREADME.md
+
 /app/assets/builds/*
 !/app/assets/builds/.keep
 
