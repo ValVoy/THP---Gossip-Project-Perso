@@ -1,13 +1,21 @@
 class SessionsController < ApplicationController
   def new
-    # Juste pour afficher la page de login
+    # Affiche la page de login
   end
 
   def create
     user = User.find_by(email: params[:email])
+    
     if user && user.authenticate(params[:password])
-      log_in(user) # On utilise notre helper
-      flash[:success] = "Content de vous revoir !"
+      # 1. Connexion classique (session)
+      log_in(user)
+      
+      # 2. Gestion du "Se souvenir de moi"
+      # Si la checkbox est cochée (valeur '1'), on crée les cookies permanents
+      # Sinon, on s'assure que les anciens cookies sont supprimés
+      params[:remember_me] == '1' ? remember(user) : forget(user)
+      
+      flash[:success] = "Content de vous revoir, #{user.first_name} !"
       redirect_to root_path
     else
       flash.now[:danger] = "Email ou mot de passe invalide"
@@ -16,8 +24,9 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session.delete(:user_id)
+    log_out if logged_in?
+    
     flash[:success] = "À bientôt !"
-    redirect_to root_path
+    redirect_to root_path, status: :see_other
   end
 end

@@ -1,27 +1,37 @@
 <div class="row justify-content-center">
   <div class="col-md-5">
-    <div class="card shadow-lg p-4 mt-5">
+    <div class="card shadow-lg p-4 mt-5 border-0 rounded-5" style="background: linear-gradient(145deg, #161b22, #0d1117); border: 1px solid #30363d !important;">
       <div class="card-body text-center">
-        <h2 class="fw-bold mb-4 text-gradient">Connexion</h2>
+        <h2 class="fw-bold mb-4 text-gradient">Connexion 🔑</h2>
         
         <%= form_tag sessions_path, method: :post do %>
           <div class="text-start mb-3">
-            <%= label_tag :email, "Email", class: "form-label" %>
-            <%= email_field_tag :email, params[:email], class: "form-control bg-dark text-white border-secondary" %>
+            <%= label_tag :email, "Email", class: "form-label text-secondary small text-uppercase fw-bold" %>
+            <%= email_field_tag :email, params[:email], class: "form-control bg-dark text-white border-secondary rounded-3", placeholder: "ton-email@exemple.com" %>
           </div>
 
-          <div class="text-start mb-4">
-            <%= label_tag :password, "Mot de passe", class: "form-label" %>
-            <%= password_field_tag :password, nil, class: "form-control bg-dark text-white border-secondary" %>
+          <div class="text-start mb-3">
+            <%= label_tag :password, "Mot de passe", class: "form-label text-secondary small text-uppercase fw-bold" %>
+            <%= password_field_tag :password, nil, class: "form-control bg-dark text-white border-secondary rounded-3", placeholder: "••••••••" %>
+          </div>
+
+          <%# --- LA CHECKBOX "REMEMBER ME" --- %>
+          <div class="text-start mb-4 ps-1">
+            <div class="form-check">
+              <%= check_box_tag :remember_me, '1', false, class: "form-check-input bg-dark border-secondary" %>
+              <%= label_tag :remember_me, "Se souvenir de moi", class: "form-check-label text-muted small" %>
+            </div>
           </div>
 
           <div class="d-grid gap-2">
-            <%= submit_tag "Me connecter", class: "btn btn-primary btn-lg rounded-pill fw-bold" %>
+            <%= submit_tag "Me connecter", class: "btn btn-primary btn-lg rounded-pill fw-bold shadow-sm" %>
           </div>
         <% end %>
 
-        <div class="mt-4">
-          <small class="text-muted">Pas encore de compte ? <%= link_to "S'inscrire", new_user_path, class: "text-info text-decoration-none" %></small>
+        <div class="mt-4 pt-3 border-top border-secondary">
+          <small class="text-muted">Pas encore de compte ? 
+            <%= link_to "S'inscrire", new_user_path, class: "text-info text-decoration-none fw-bold" %>
+          </small>
         </div>
       </div>
     </div>

@@ -6,7 +6,6 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%# Ligne CRUCIALE pour que Turbo et les boutons de suppression fonctionnent %>
     <%= javascript_importmap_tags %>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
@@ -23,7 +22,22 @@
       .btn-logout-custom:hover { color: #ff7b72 !important; }
       .card { background-color: #161b22; border: 1px solid #30363d; border-radius: 12px; }
       .alert { border-radius: 12px; border: none; }
-      @media (max-width: 991.98px) { .navbar-collapse.show { background-color: #161b22; margin: 0 -1rem; padding: 1rem; border-top: 1px solid #30363d; margin-top: 0.5rem; } .nav-link { padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); } }
+
+      /* Ajustements spécifiques Mobile */
+      @media (max-width: 991.98px) { 
+        .navbar-collapse { 
+          background-color: #161b22; 
+          margin-top: 10px; 
+          padding: 15px; 
+          border-radius: 15px; 
+          border: 1px solid #30363d; 
+        } 
+        .nav-link { 
+          padding: 12px 5px !important; 
+          border-bottom: 1px solid rgba(255,255,255,0.05); 
+        } 
+        .navbar-nav { align-items: flex-start !important; }
+      }
     </style>
   </head>
 
@@ -31,18 +45,35 @@
     <nav class="navbar navbar-expand-lg sticky-top">
       <div class="container">
         <%= link_to "GossipProject 🗣️", root_path, class: "navbar-brand fw-bold text-gradient" %>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"><span class="navbar-toggler-icon"></span></button>
+        
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
         <div class="collapse navbar-collapse" id="mainNav">
-          <ul class="navbar-nav ms-auto align-items-center">
-            <li class="nav-item d-lg-none"><%= link_to "🏠 Accueil", root_path, class: "nav-link" %></li>
-            <% if logged_in? %>
-              <li class="nav-item d-lg-none"><%= link_to "👤 Mon Profil", user_path(current_user.id), class: "nav-link text-info fw-bold" %></li>
-              <li class="nav-item d-lg-none"><%= link_to "✍️ Créer un potin", new_gossip_path, class: "nav-link text-primary fw-bold" %></li>
-              <li class="nav-item d-lg-none"><%= button_to "🚪 Déconnexion", session_path(current_user.id), method: :delete, class: "nav-link text-danger bg-transparent border-0 p-0 w-100 text-start" %></li>
-            <% else %>
-              <li class="nav-item d-lg-none"><%= link_to "🔑 Se connecter", new_session_path, class: "nav-link" %></li>
-              <li class="nav-item d-lg-none"><%= link_to "📝 S'inscrire", new_user_path, class: "nav-link text-info" %></li>
-            <% end %>
+          <ul class="navbar-nav ms-auto">
+            
+            <%# --- LINKS VISIBLES UNIQUEMENT SUR MOBILE (< 992px) --- %>
+            <div class="d-lg-none w-100">
+              <li class="nav-item"><%= link_to "🏠 Accueil", root_path, class: "nav-link text-white" %></li>
+              <% if logged_in? %>
+                <li class="nav-item"><%= link_to "👤 Mon Profil", user_path(current_user.id), class: "nav-link text-info fw-bold" %></li>
+                <li class="nav-item"><%= link_to "✍️ Créer un potin", new_gossip_path, class: "nav-link text-primary fw-bold" %></li>
+                <li class="nav-item mt-2">
+                  <%= button_to session_path(current_user.id), method: :delete, class: "btn btn-outline-danger btn-sm w-100 text-start px-3 py-2 rounded-3" do %>
+                    🚪 Déconnexion
+                  <% end %>
+                </li>
+              <% else %>
+                <li class="nav-item"><%= link_to "🔑 Se connecter", new_session_path, class: "nav-link" %></li>
+                <li class="nav-item"><%= link_to "📝 S'inscrire", new_user_path, class: "nav-link text-info" %></li>
+              <% end %>
+              <hr class="text-secondary">
+              <li class="nav-item"><%= link_to "👥 L'Équipe", team_path, class: "nav-link small opacity-75" %></li>
+              <li class="nav-item"><%= link_to "📧 Contact", contact_path, class: "nav-link small opacity-75" %></li>
+            </div>
+
+            <%# --- DROPDOWN VISIBLE UNIQUEMENT SUR DESKTOP (>= 992px) --- %>
             <li class="nav-item dropdown d-none d-lg-block">
               <a class="nav-link dropdown-toggle btn btn-outline-secondary px-4 rounded-pill text-white" href="#" role="button" data-bs-toggle="dropdown">
                 <%= logged_in? ? "Salut, #{current_user.first_name} !" : "Menu" %>
@@ -56,16 +87,23 @@
                   <li><%= link_to "👤 Mon Profil", user_path(current_user.id), class: "dropdown-item fw-bold text-info" %></li>
                   <li><%= link_to "✍️ Créer un potin", new_gossip_path, class: "dropdown-item fw-bold text-primary" %></li>
                   <li><hr class="dropdown-divider border-secondary"></li>
-                  <li><%= button_to "🚪 Se déconnecter", session_path(current_user.id), method: :delete, class: "btn-logout-custom", form: { class: "m-0 p-0" } %></li>
+                  <li>
+                    <%= button_to session_path(current_user.id), method: :delete, class: "btn-logout-custom", form: { class: "m-0 p-0" } do %>
+                      🚪 Se déconnecter
+                    <% end %>
+                  </li>
                 <% else %>
                   <li><%= link_to "🔑 Se connecter", new_session_path, class: "dropdown-item" %></li>
                   <li><%= link_to "📝 S'inscrire", new_user_path, class: "dropdown-item fw-bold text-info" %></li>
                 <% end %>
+                
+                <%# --- ON RE-AJOUTE ICI POUR LA VERSION DESKTOP --- %>
                 <li><hr class="dropdown-divider border-secondary"></li>
                 <li><%= link_to "👥 L'Équipe", team_path, class: "dropdown-item" %></li>
                 <li><%= link_to "📧 Contact", contact_path, class: "dropdown-item" %></li>
               </ul>
             </li>
+
           </ul>
         </div>
       </div>
