@@ -33,6 +33,10 @@ group :test do
   gem "selenium-webdriver"
 end
 
+group :production do
+  gem "pg"
+end
+
 gem "foreman", "~> 0.90.0"
 
 gem "cssbundling-rails"
