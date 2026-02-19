@@ -36,7 +36,7 @@ module SessionsHelper
 
   # Annule la persistance du cookie
   def forget(user)
-    user.forget 
+    user.forget
     cookies.delete(:user_id)
     cookies.delete(:remember_token)
   end

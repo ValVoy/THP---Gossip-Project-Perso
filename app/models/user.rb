@@ -7,7 +7,7 @@ class User < ApplicationRecord
   has_many :private_message_recipients, foreign_key: :recipient_id
   has_many :received_messages, through: :private_message_recipients, source: :private_message
 
-  has_secure_password 
+  has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
 
   # --- MÉTHODE MANQUANTE À AJOUTER ---
