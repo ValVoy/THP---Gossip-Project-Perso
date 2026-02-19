@@ -17,4 +17,5 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: "example.com" }
   config.i18n.fallbacks = true
   config.active_record.dump_schema_after_migration = false
+  config.active_storage.variant_processor = :disabled
 end

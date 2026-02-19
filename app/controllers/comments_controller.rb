@@ -4,7 +4,7 @@ class CommentsController < ApplicationController
 
   def create
     @gossip = Gossip.find(params[:gossip_id])
-    @comment = Comment.new(content: params[:content], user: current_user, gossip: @gossip)
+    @comment = Comment.new(content: params[:content], user: current_user, commentable: @gossip)
 
     if @comment.save
       flash[:success] = "Commentaire ajouté !"

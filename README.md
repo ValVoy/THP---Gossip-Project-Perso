@@ -15,6 +15,7 @@ Welcome to the **Gossip Project**, a fully functional social platform built duri
 
 ### 🔐 Security & Authentication
 - **Custom Auth**: Built from scratch using `BCrypt` (no Devise).
+- **Remember Me**: Persistent login system using signed cookies and secure tokens.
 - **Permissions**: Ownership checks ensure only authors can edit/delete their content.
 - **Validations**: Robust ActiveRecord validations with dynamic error messages.
 
@@ -29,63 +30,76 @@ Welcome to the **Gossip Project**, a fully functional social platform built duri
 
 <br>
 
-## 📊 Database Architecture
-
-The project uses a complex relational schema to handle social interactions efficiently.
-
-
-
-<details>
-<summary><b>📐 View Entity-Relationship Details</b></summary>
-
-| Table | Role |
-| :--- | :--- |
-| **USER** | Secure credentials and profile metadata. |
-| **GOSSIP** | Core content entity, belongs to a User. |
-| **CITY** | Geographic hub linking multiple users. |
-| **COMMENT** | Polymorphic (belongs to a Gossip or another Comment). |
-| **LIKE** | Polymorphic (belongs to a Gossip or a Comment). |
-| **TAG** | N-N association with Gossips. |
-
-</details>
-
-<br>
-
 ## 🛠️ Installation & Setup
 
 1. **Clone the repository**:
-  ```bash
-  git clone [https://github.com/DevRedious/gossip-project.git](https://github.com/DevRedious/gossip-project.git)
-  cd gossip-project
-  ```
+    ```bash
+    git clone [https://github.com/DevRedious/gossip-project.git](https://github.com/DevRedious/gossip-project.git)
+    cd gossip-project
+    ```
+    
 2. **Install dependencies**:
-  ```bash
-  bundle install
-  ```
+    ```bash
+    bundle install
+    ```
 3. **Database setup & Seed**:
-  ```bash
-  rails db:create
-  rails db:migrate
-  rails db:seed
-  ```
-*The seed generates 10 users with a default password: password123.*
-4. **Launch the server**:
-  ```bash
-  rails server
-  ```
+    ```bash
+    rails db:create
+    rails db:migrate
+    rails db:seed
+    ```
+*The seed generates users with a default password: password.*
+4. **Launch the server**
+    ```bash
+    ./bin/dev
+    ```
+
+<br>
+
+## 🏭 Running in Production Mode (Locally)
+
+If you want to test the application in a real-world environment without deploying to Heroku, follow these steps.
+
+[!IMPORTANT]
+
+Make sure to close your development server (./bin/dev) before starting the production server to avoid port conflicts.
+
+1. **Precompile Assets**
+Since the code is "frozen" in production, you must precompile CSS and JS:
+    ```bash
+    SECRET_KEY_BASE=$(rails secret) RAILS_ENV=production rails assets:precompile SKIP_CSS_BUILD=true
+    ```
+2. **Prepare Database**
+Rails 8 requires specific databases for primary data, cache, and queues:
+    ```bash
+    SECRET_KEY_BASE=$(rails secret) RAILS_ENV=production rails db:prepare
+    ```
+3. **Launch Production Server**
+    ```bash
+    SECRET_KEY_BASE=$(rails secret) RAILS_ENV=production bin/rails server
+    ```
+
+### 🧹 Back to Development
+Once finished, you must clean the precompiled assets to see your code changes again in development mode:
+
+    ```bash
+    rails assets:clobber
+    ```
+
+you can find more information here -> https://guides.rubyonrails.org/asset_pipeline.html
 
 <br>
 
 ## 🔍 Key Concepts Learned
 
-### 1. Advanced ActiveRecord
-Mastery of has_many :through, Polymorphic associations, and dependent: :destroy to maintain data integrity.
+### 1. Cookie-Based Persistence
+Implementation of a "Remember Me" feature using cookies.permanent.signed and a remember_digest in the database to securely store user sessions.
 
-### 2. Custom Security Flow
-Implementation of a manual SessionsController to manage the authentication lifecycle (Login -> Session Cookie -> Logout).
+### 2. Advanced ActiveRecord
+Mastery of has_many :through, Polymorphic associations (for comments and likes), and dependent: :destroy to maintain data integrity.
 
-### 3. Front-End UX
-Using Rails Helpers (link_to, button_to with Turbo) and Flash messages to provide a seamless user experience.
+### 3. Production Hardening
+Understanding the differences between environments: asset pipeline minification, security headers, and encrypted credentials.
 
 <br>
 
@@ -95,6 +109,6 @@ This project is for educational use within The Hacking Project. Feel free to mod
 
 Morgan, Romain & Valentin - Backend Foundations.
 
-Valentin - Full-Stack implementation, Security & UI/UX.
+Valentin - Full-Stack implementation, Security, Persistence & UI/UX.
 
 _The Hacking Project 2026_

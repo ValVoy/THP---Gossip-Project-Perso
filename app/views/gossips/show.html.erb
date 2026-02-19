@@ -24,14 +24,14 @@
   <p class="fs-5 leading-relaxed mb-5 text-secondary"><%= @gossip.content %></p>
 
   <div class="d-flex flex-wrap gap-3">
-    <div class="card p-2 px-3 rounded-4 border-secondary d-flex flex-row align-items-center bg-transparent">
+    <div class="card p-2 px-3 rounded-4 border-secondary d-flex flex-row align-items-center bg-transparent" style="border: 1px solid #30363d !important;">
       <div class="me-3 fs-3">🧔</div>
       <div>
         <small class="text-muted d-block" style="font-size: 0.7rem;">Auteur</small>
         <%= link_to @gossip.user.first_name, user_path(@gossip.user.id), class: "fw-bold text-decoration-none text-primary" %>
       </div>
     </div>
-    <div class="card p-2 px-3 rounded-4 border-secondary d-flex flex-row align-items-center bg-transparent">
+    <div class="card p-2 px-3 rounded-4 border-secondary d-flex flex-row align-items-center bg-transparent" style="border: 1px solid #30363d !important;">
       <div class="me-3 fs-3">📍</div>
       <div>
         <small class="text-muted d-block" style="font-size: 0.7rem;">Ville</small>
@@ -44,7 +44,6 @@
     <div class="mt-5 pt-4 border-top border-secondary d-flex align-items-center gap-3">
       <%= link_to "Modifier", edit_gossip_path(@gossip.id), class: "btn btn-outline-warning btn-sm px-4 rounded-pill" %>
       
-      <%# Bouton de suppression corrigé pour Turbo %>
       <%= button_to gossip_path(@gossip.id), 
           method: :delete, 
           form: { data: { turbo_confirm: "Voulez-vous vraiment supprimer ce potin ?" } }, 
@@ -61,15 +60,23 @@
     <h3 class="fw-bold mb-4 text-white">Commentaires (<%= @gossip.comments.count %>)</h3>
 
     <% @gossip.comments.select(&:persisted?).each do |comment| %>
-      <div class="card mb-3 border-secondary rounded-4" style="background-color: #161b22;">
-        <div class="card-body">
-          <p class="mb-2 text-secondary"><%= comment.content %></p>
+      <div class="card mb-3 border-0 rounded-4 shadow-sm" style="background-color: #161b22; border: 1px solid #30363d !important;">
+        <div class="card-body p-3">
+          <p class="mb-3 text-secondary" style="font-size: 0.95rem;"><%= comment.content %></p>
+          
           <div class="d-flex justify-content-between align-items-center border-top border-secondary pt-2">
-            <small class="text-muted">Par <span class="text-primary"><%= comment.user.first_name %></span></small>
+            <small class="text-muted">Par <span class="text-primary fw-bold"><%= comment.user.first_name %></span></small>
+            
             <% if logged_in? && current_user == comment.user %>
-              <div class="d-flex gap-2">
-                <%= link_to "Éditer", edit_gossip_comment_path(@gossip.id, comment.id), class: "text-warning small text-decoration-none" %>
-                <%= button_to "Supprimer", gossip_comment_path(@gossip.id, comment.id), method: :delete, form: { data: { turbo_confirm: "Supprimer ce commentaire ?" } }, class: "text-danger small bg-transparent border-0 p-0 text-decoration-none" %>
+              <div class="d-flex align-items-center gap-3">
+                <%= link_to "Éditer", edit_gossip_comment_path(@gossip.id, comment.id), class: "text-warning small text-decoration-none opacity-75" %>
+                
+                <%= button_to gossip_comment_path(@gossip.id, comment.id), 
+                    method: :delete, 
+                    form: { data: { turbo_confirm: "Supprimer ce commentaire ?" }, class: "d-inline" }, 
+                    class: "text-danger small bg-transparent border-0 p-0 text-decoration-none opacity-75" do %>
+                  Supprimer
+                <% end %>
               </div>
             <% end %>
           </div>
@@ -78,15 +85,28 @@
     <% end %>
 
     <% if logged_in? %>
-      <div class="card mt-5 p-4 border-0 rounded-4 text-white" style="background: linear-gradient(135deg, #0d6efd, #6610f2);">
-        <h5 class="mb-3 fw-bold">Ajouter un commentaire</h5>
+      <div class="card mt-5 p-4 border-0 rounded-4 shadow-lg" style="background: #161b22; border: 1px solid #30363d !important;">
+        <h5 class="mb-3 fw-bold text-white">Ajouter un commentaire</h5>
         <%= form_tag gossip_comments_path(@gossip.id), method: "post" do %>
-          <%= text_area_tag 'content', nil, class: 'form-control border-0 mb-3 shadow-sm', placeholder: "Ton avis...", rows: 3, style: "background: rgba(255,255,255,0.1); color: white;" %>
-          <%= submit_tag "Commenter", class: "btn btn-light text-primary fw-bold rounded-pill px-4" %>
+          <%= text_area_tag 'content', nil, 
+              class: 'form-control border-secondary mb-3 shadow-sm text-white', 
+              placeholder: "Partage ton avis sur ce potin...", 
+              rows: 3, 
+              style: "background: #0d1117; border-radius: 12px; resize: none; border: 1px solid #30363d;" %>
+          
+          <div class="text-end">
+            <%= submit_tag "Commenter", class: "btn btn-primary fw-bold rounded-pill px-4 shadow" %>
+          </div>
         <% end %>
       </div>
     <% else %>
-      <div class="text-center mt-4"><p class="text-muted">Connecte-toi pour commenter !</p></div>
+      <div class="text-center mt-5 py-4 border border-secondary border-dashed rounded-4" style="border-style: dashed !important;">
+        <p class="text-muted mb-0">
+          Envie de donner ton avis ? 
+          <%= link_to "Connecte-toi", new_session_path, class: "text-primary text-decoration-none fw-bold" %> 
+          pour commenter !
+        </p>
+      </div>
     <% end %>
   </div>
 </div>
